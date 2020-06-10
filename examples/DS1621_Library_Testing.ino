@@ -7,13 +7,13 @@ DS1621 tempSensor = DS1621(DS1621_ADDRESS);
 
 void setup() {
   Serial.begin(115200);
-  tempSensor.begin();
 }
 
 void loop() {
   Serial.print("Temperature (Deg. F): ");
-  Serial.println(tempSensor.getTempF()/10);
+  Serial.println(tempSensor.getTempF());
+  delay(1000);
   Serial.print("Temperature (Deg. C): ");
-  Serial.println(tempSensor.getTempC()/10);
+  Serial.println(tempSensor.getTempC());
   delay(1000);
 }

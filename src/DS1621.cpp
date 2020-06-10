@@ -1,5 +1,9 @@
 #include "DS1621.h"
 
+#define StartConvert 0xEE
+#define StopConvert 0x22
+#define GetTemperature 0xAA
+
 DS1621::DS1621(int address) {
   _address = address;
 }
@@ -7,30 +11,30 @@ DS1621::DS1621(int address) {
 void DS1621::begin() {
   Wire.begin();
   Wire.beginTransmission(_address);
-  Wire.write(0xAC);
-  Wire.write(0x02);
+  Wire.write(StartConvert);
+  Wire.endTransmission();
   Wire.beginTransmission(_address);
-  Wire.write(0xEE);
+  Wire.write(StopConvert);
   Wire.endTransmission();
 }
 
-int16_t DS1621::getTempC() {
+int DS1621::getTempC() {
   Wire.beginTransmission(_address);
-  Wire.write(0xAA);
+  Wire.write(GetTemperature);
   Wire.endTransmission(false);
   Wire.requestFrom(_address, 2);
-  uint8_t t = Wire.read();
+  int t = Wire.read();
   
   return t;  
 }
 
-int16_t DS1621::getTempF() {
+int DS1621::getTempF() {
   Wire.beginTransmission(_address);
-  Wire.write(0xAA);
+  Wire.write(GetTemperature);
   Wire.endTransmission(false);
   Wire.requestFrom(_address, 2);
-  uint8_t t = Wire.read();
-  int16_t tF = t * 9/5 + 320;
+  int t = Wire.read();
+  int tF = (t * 9/5) + 32;
   
   return tF;  
 }

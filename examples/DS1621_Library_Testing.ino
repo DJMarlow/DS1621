@@ -1,7 +1,7 @@
 #include <DS1621.h>
 
 //Default address with no pins grounded
-#define DS1621_ADDRESS  0x48
+#define DS1621_ADDRESS  0x4F
 
 DS1621 tempSensor = DS1621(DS1621_ADDRESS);
 

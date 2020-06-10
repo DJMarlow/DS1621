@@ -8,7 +8,7 @@ DS1621::DS1621(int address) {
   _address = address;
 }
 
-void DS1621::begin() {
+int DS1621::getTempC() {
   Wire.begin();
   Wire.beginTransmission(_address);
   Wire.write(StartConvert);
@@ -16,9 +16,6 @@ void DS1621::begin() {
   Wire.beginTransmission(_address);
   Wire.write(StopConvert);
   Wire.endTransmission();
-}
-
-int DS1621::getTempC() {
   Wire.beginTransmission(_address);
   Wire.write(GetTemperature);
   Wire.endTransmission(false);
@@ -29,6 +26,13 @@ int DS1621::getTempC() {
 }
 
 int DS1621::getTempF() {
+  Wire.begin();
+  Wire.beginTransmission(_address);
+  Wire.write(StartConvert);
+  Wire.endTransmission();
+  Wire.beginTransmission(_address);
+  Wire.write(StopConvert);
+  Wire.endTransmission();
   Wire.beginTransmission(_address);
   Wire.write(GetTemperature);
   Wire.endTransmission(false);

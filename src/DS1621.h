@@ -18,7 +18,6 @@ public:
 
   DS1621(int address);
 
-  void begin();
   int getTempC();
   int getTempF();
 

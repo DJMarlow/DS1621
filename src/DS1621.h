@@ -19,8 +19,8 @@ public:
   DS1621(int address);
 
   void begin();
-  int16_t getTempC();
-  int16_t getTempF();
+  int getTempC();
+  int getTempF();
 
 private:
   //I2C address

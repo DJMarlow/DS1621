@@ -11,6 +11,8 @@ DS1621	KEYWORD1
 #######################################
 # Methods and Functions (KEYWORD2)
 #######################################
-begin		KEYWORD2
+begin	KEYWORD2
+startConvert KEYWORD2
+finishedConvert KEYWORD2
 getTempC	KEYWORD2
 getTempF	KEYWORD2

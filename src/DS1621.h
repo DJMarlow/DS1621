@@ -16,10 +16,13 @@
 class DS1621 {
 public:
 
-  DS1621(int address);
+  DS1621(uint8_t A0, uint8_t A1, uint8_t A2);
 
-  int getTempC();
-  int getTempF();
+  void begin();
+  void startConvert();
+  uint8_t finishedConvert();
+  float getTempC();
+  float getTempF();
 
 private:
   //I2C address

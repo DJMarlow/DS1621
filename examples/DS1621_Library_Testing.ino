@@ -1,15 +1,17 @@
 #include <DS1621.h>
 
-//Default address with no pins grounded
-#define DS1621_ADDRESS  0x4F
-
-DS1621 tempSensor = DS1621(DS1621_ADDRESS);
+//Pass pin grounded argument (A0, A1, A2)
+//If grounded, assign 1 to argument, else 0
+DS1621 tempSensor = DS1621(0,0,0);
 
 void setup() {
   Serial.begin(115200);
+  tempSensor.begin();
 }
 
 void loop() {
+  tempSensor.startConvert();
+  while (tempSensor.finishedConvert());
   Serial.print("Temperature (Deg. F): ");
   Serial.println(tempSensor.getTempF());
   delay(1000);

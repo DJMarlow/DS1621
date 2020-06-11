@@ -1,44 +1,94 @@
 #include "DS1621.h"
 
-#define StartConvert 0xEE
-#define StopConvert 0x22
-#define GetTemperature 0xAA
+#define START 0xEE
+#define STOP 0x22
+#define GET_TEMP 0xAA
+#define CONFIG 0x22
 
-DS1621::DS1621(int address) {
-  _address = address;
+DS1621::DS1621(uint8_t A0, uint8_t A1, uint8_t A2) {
+  _address = (0x48 | A2 << 2 | A1 << 1 | A0);
 }
 
-int DS1621::getTempC() {
+void DS1621::begin(){
   Wire.begin();
   Wire.beginTransmission(_address);
-  Wire.write(StartConvert);
+  Wire.write(STOP);
   Wire.endTransmission();
   Wire.beginTransmission(_address);
-  Wire.write(StopConvert);
+  Wire.write(CONFIG);
+  Wire.write((0 << 6 | 0 << 5 | 0 << 4 | 0 << 1 | 1));
   Wire.endTransmission();
+}
+
+void DS1621::startConvert(){
   Wire.beginTransmission(_address);
-  Wire.write(GetTemperature);
+  Wire.write(START);
+  Wire.endTransmission();
+}
+
+uint8_t DS1621::finishedConvert(){
+  uint8_t i = 0;
+
+  Wire.beginTransmission(_address);
+  Wire.write(CONFIG);
+  Wire.endTransmission(false);
+  Wire.requestFrom(_address, 1);
+  while (Wire.available())
+  {
+      i = Wire.read() & 0x80;
+  }
+
+  return i;
+}
+
+float DS1621::getTempC() {
+  uint8_t msb = 0;
+  uint8_t lsb = 0;
+  float t = 0.0;
+
+  Wire.beginTransmission(_address);
+  Wire.write(GET_TEMP);
   Wire.endTransmission(false);
   Wire.requestFrom(_address, 2);
-  int t = Wire.read();
+  if (2 <= Wire.available()) {
+      msb = Wire.read();
+      lsb = Wire.read();
+  }
+
+  t = (float) msb;
+  if (lsb & 0x80){
+    t += 0.5;
+  }
+  if (msb & 0x80){
+    t -= 256;
+  }
   
   return t;  
 }
 
-int DS1621::getTempF() {
-  Wire.begin();
+float DS1621::getTempF() {
+  uint8_t msb = 0;
+  uint8_t lsb = 0;
+  float t = 0.0;
+
   Wire.beginTransmission(_address);
-  Wire.write(StartConvert);
-  Wire.endTransmission();
-  Wire.beginTransmission(_address);
-  Wire.write(StopConvert);
-  Wire.endTransmission();
-  Wire.beginTransmission(_address);
-  Wire.write(GetTemperature);
+  Wire.write(GET_TEMP);
   Wire.endTransmission(false);
   Wire.requestFrom(_address, 2);
-  int t = Wire.read();
-  int tF = (t * 9/5) + 32;
+  if (2 <= Wire.available()) {
+      msb = Wire.read();
+      lsb = Wire.read();
+  }
+
+  t = (float) msb;
+  if (lsb & 0x80){
+    t += 0.5;
+  }
+  if (msb & 0x80){
+    t -= 256;
+  }
+  
+  float tF = (t * 9/5) + 32;
   
   return tF;  
 }

@@ -5,6 +5,9 @@
 #define GET_TEMP 0xAA
 #define CONFIG 0x22
 
+DS1621::DS1621(){
+}
+
 DS1621::DS1621(uint8_t A0, uint8_t A1, uint8_t A2) {
   _address = (0x48 | A2 << 2 | A1 << 1 | A0);
 }

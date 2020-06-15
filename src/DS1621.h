@@ -16,6 +16,7 @@
 class DS1621 {
 public:
 
+  DS1621();
   DS1621(uint8_t A0, uint8_t A1, uint8_t A2);
 
   void begin();

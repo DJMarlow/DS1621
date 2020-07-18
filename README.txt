@@ -1,3 +1,6 @@
+NOTE: The DS1621 appears to have problems intermittently dripping the I2C bus.  Recommend using the Ds1631 sensor if possible, library can be found here:
+https://github.com/DJMarlow/DS1631
+
 # `DS1621` library
 
 Arduino library for communication with a DS1621
